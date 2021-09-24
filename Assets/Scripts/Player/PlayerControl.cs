@@ -36,31 +36,22 @@ public class PlayerControl : MonoBehaviour
 
     void Run()
     {
-        int flip;
-        Vector3 tempPosition = transform.position;
-        if(transform.localScale.x > 0){
-            flip = 1;
-        }else{
-            flip = -1;
+        transform.Translate(new Vector3(Input.GetAxisRaw("Horizontal") * characterStats.Speed() * Time.deltaTime, 0f , 0f));
+        if(Input.GetAxisRaw("Horizontal") > 0)
+        {
+            FlipCharacter(1);
         }
-
-        if(characterStats.IsRight()){
-            flip = 1;
-            tempPosition.x += characterStats.Speed() * Time.deltaTime;
-        }else if(characterStats.IsLeft()){
-            flip = -1;
-            tempPosition.x -= characterStats.Speed() * Time.deltaTime;
+        else if(Input.GetAxisRaw("Horizontal") < 0)
+        {
+            FlipCharacter(-1);
         }
-
-        transform.position = tempPosition;
-        FlipCharacter(flip);
+        
     }
 
     void Jump()
     {
         Climb();
-        if(characterStats.IsJump() && characterStats.IsGround() && IsVelocityChange() && !IsClimb()){
-            characterStats.IsJump(false);
+        if(Input.GetKeyDown(KeyCode.Space) && characterStats.IsGround() && IsVelocityDontChange() && !IsClimb()){
             rb.AddForce(Vector2.up * characterStats.Speed(), ForceMode2D.Impulse);
         }
     }
@@ -68,11 +59,15 @@ public class PlayerControl : MonoBehaviour
     private bool IsClimb(){
         RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.up, 
                                                     characterStats.Speed(), characterStats.whatIsLadder);
-        if(hitInfo.collider != null){
-            if(characterStats.IsJump()){
+        if(hitInfo.collider != null)
+        {
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
                 characterStats.IsLadder(true);
             }
-        }else{
+        }
+        else
+        {
             characterStats.IsLadder(false);
         }
 
@@ -81,7 +76,7 @@ public class PlayerControl : MonoBehaviour
 
     private void Climb()
     {
-        if(IsClimb() && characterStats.IsJump()){
+        if(IsClimb() && Input.GetKey(KeyCode.Space)){
             rb.velocity = new Vector2(rb.velocity.x, 2f);
             rb.gravityScale = 0;
         }else{
@@ -107,8 +102,8 @@ public class PlayerControl : MonoBehaviour
     public void UpdateAnimationClip()
     {
         if(!isDead){
-            if(characterStats.IsGround() && !characterStats.IsLadder() && IsVelocityChange()){
-                if(characterStats.IsLeft() || characterStats.IsRight()){
+            if(characterStats.IsGround() && !characterStats.IsLadder() && IsVelocityDontChange()){
+                if(Input.GetAxisRaw("Horizontal") != 0){
                     ChangeStateAnimation(characterStats.animationStates.PLAYER_RUN);
                 }else{
                     ChangeStateAnimation(characterStats.animationStates.PLAYER_IDLE);
@@ -139,7 +134,7 @@ public class PlayerControl : MonoBehaviour
         );
     }
 
-    public bool IsVelocityChange(){
+    public bool IsVelocityDontChange(){
         return rb.velocity.y > -0.01f && rb.velocity.y < 0.01f;
     }
 

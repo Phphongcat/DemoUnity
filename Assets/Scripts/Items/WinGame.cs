@@ -5,7 +5,6 @@ using UnityEngine;
 public class WinGame : MonoBehaviour
 {
     [SerializeField] private GameObject winGame;
-    [SerializeField] private GameObject ControlButtons;
 
     void OnTriggerEnter2D(Collider2D collider2D)
     {
@@ -19,7 +18,6 @@ public class WinGame : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
         winGame.gameObject.SetActive(true);
-        ControlButtons.gameObject.SetActive(false);
         Time.timeScale = 0;
     }
 }

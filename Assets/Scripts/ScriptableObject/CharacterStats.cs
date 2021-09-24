@@ -9,16 +9,10 @@ public class CharacterStats : ScriptableObject
 
     public bool SavePoint;
     public int MaxHealth{get; private set;}
-
-    private bool isRight;
-    private bool isLeft;
-    private bool isJump;
-
     private bool isJumpOrFall;
     private bool isGround;
     private bool isLadder;
     private bool isDead;
-
     private int score;
 
     public LayerMask GroundLayer;
@@ -31,9 +25,6 @@ public class CharacterStats : ScriptableObject
         Score(0);
 
         IsDead(false);
-        IsJump(false);
-        IsLeft(false);
-        IsRight(false);
         IsLadder(false);
         IsGround(false);
         
@@ -45,15 +36,6 @@ public class CharacterStats : ScriptableObject
 
     public void Score(int inScore) { score = inScore; }
     public int Score() { return score; }
-
-    public void IsRight(bool enable) { isRight = enable; }
-    public bool IsRight() { return isRight; }
-
-    public void IsLeft(bool enable) { isLeft = enable; }
-    public bool IsLeft() { return isLeft; }
-
-    public void IsJump(bool enable) { isJump = enable; }
-    public bool IsJump() { return isJump; }
 
     public void IsGround(bool enable) { isGround = enable; }
     public bool IsGround() { return isGround; }

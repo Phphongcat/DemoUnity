@@ -37,12 +37,20 @@ public class GamePlayManager : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
+    void FindCharacterToCameraFollow()
+    {
+        if(cinemachineVirtualCamera.Follow == null)
+        {
+            cinemachineVirtualCamera.Follow = FindObjectOfType<PlayerControl>().transform;
+        }
+    }
+
     void Update()
     {
-        UpdateScore();
         SavePointPlayer();
         PlayerRepawn();
+        FindCharacterToCameraFollow();
+        UpdateScore();
     }
 
     void SavePointPlayer()
